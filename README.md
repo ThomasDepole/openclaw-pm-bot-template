@@ -1,5 +1,8 @@
 # OpenClaw PM Bot — Workspace Template
 
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/ThomasDepole/openclaw-pm-bot-template/releases/tag/v1.0.0)
+[![OpenClaw](https://img.shields.io/badge/built%20on-OpenClaw-purple.svg)](https://docs.openclaw.ai)
+
 **A ready-to-deploy project management assistant built on [OpenClaw](https://docs.openclaw.ai).**
 
 This template gives you a PM bot that tracks projects, processes meeting notes, flags risks, creates action items, and maintains an organized knowledge base about your company, clients, team, and work — all through a simple drop-folder ingestion process. No integrations required to get started. Drop a document, ask it to read it, and it gets smarter.
@@ -341,6 +344,8 @@ Once you've got meeting notes flowing in automatically, everything else gets eas
 ```
 workspace/
 ├── README.md               ← You are here
+├── CHANGELOG.md            ← Version history
+├── VERSION                 ← Current version number
 ├── SOUL.md                 ← Bot personality, communication style, PM judgment
 ├── IDENTITY.md             ← Name, role, company (fill in at setup)
 ├── AGENTS.md               ← Operating guide — how the bot works
