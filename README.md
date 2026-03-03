@@ -48,7 +48,35 @@ git clone https://github.com/your-org/openclaw-pm-template.git workspace-yournam
 
 ### 2. Point an OpenClaw agent at the workspace
 
-In your OpenClaw config, set the agent's workspace to the cloned directory. See [OpenClaw docs](https://docs.openclaw.ai) for agent configuration.
+Add the agent to your `openclaw.json` config:
+
+**`agents.list` entry:**
+```json
+{
+  "id": "pm-bot",
+  "name": "PM Bot",
+  "workspace": "/home/node/.openclaw/workspace-yourname",
+  "model": { "primary": "anthropic/claude-sonnet-4-6" },
+  "tools": { "deny": ["gateway"] }
+}
+```
+
+**`bindings` entry** (Discord channel example):
+```json
+{
+  "agentId": "pm-bot",
+  "match": {
+    "channel": "discord",
+    "peer": {
+      "kind": "channel",
+      "id": "YOUR_DISCORD_CHANNEL_ID"
+    },
+    "guildId": "YOUR_DISCORD_GUILD_ID"
+  }
+}
+```
+
+Both go into the top-level `openclaw.json` — `agents.list` is an array of agent definitions, `bindings` is a separate top-level array that routes messages to agents. Restart the gateway after saving. See [OpenClaw docs](https://docs.openclaw.ai) for full config reference and other channel types (Telegram, Slack, etc.).
 
 ### 3. Have your first conversation
 
