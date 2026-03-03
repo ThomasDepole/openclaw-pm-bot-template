@@ -1,18 +1,51 @@
-# TOOLS.md - Local Notes
+# TOOLS.md - Local Configuration Notes
 
-## Trello
+This file is for your environment-specific setup. Fill it in as you configure integrations.
 
-- **Primary board:** [FILL IN: Board name] — ID: `[FILL IN]`
-- **Key lists:**
-  - [FILL IN: List name] — ID: `[FILL IN]` (e.g. New Tasks, In Progress, Done)
-  - [FILL IN: List name] — ID: `[FILL IN]`
-- **Key labels:**
-  - [FILL IN: Label name] — ID: `[FILL IN]` — color: [FILL IN]
+---
 
-## rclone / Dropbox
+## Task Management Tool
 
-[FILL IN if Dropbox ingestion pipeline is configured. See `docs/rclone-dropbox-setup.md` in workspace-michelle for the full setup guide.]
+**Tool:** [FILL IN: Trello / Jira / Azure DevOps / Linear / Asana / GitHub Issues / Monday.com / Other]
+
+**Connection method:** [FILL IN: REST API / CLI / SDK]
+
+**Base URL / Workspace:** [FILL IN: e.g. https://yourcompany.atlassian.net or trello.com/b/xxx]
+
+**Credentials:** Stored in `.env` as `[FILL IN: env var names]`
+
+**Board/Project IDs:** See `memory/task-board.md`
+
+---
+
+## Meeting Notes Ingestion
+
+**Method:** [FILL IN: Manual drop / Plaud + Zapier + Dropbox / Other]
+
+**Dropbox sync:** [FILL IN: Yes/No — if yes, see `docs/rclone-dropbox-setup.md`]
+
+**Sync path:** [FILL IN: Dropbox folder → local ingestion path]
+
+**Cron job:** [FILL IN: Crontab entry once configured]
+
+---
 
 ## Other Integrations
 
-[FILL IN: Any additional tools — Slack, Jira, GitHub, etc.]
+### Slack / Teams
+[FILL IN: Webhook URLs or access method if configured]
+
+### GitHub / GitLab
+[FILL IN: Repo URLs, access tokens, org names]
+
+### Calendar
+[FILL IN: How you share calendar context — screenshots, ICS exports, Google Calendar API, etc.]
+
+### Communication / Email
+[FILL IN: If email integration is configured]
+
+---
+
+## Notes
+
+[FILL IN: Any environment-specific quirks, shortcuts, or reminders]

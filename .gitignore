@@ -2,6 +2,10 @@
 .env
 *.secret
 
-# Ingestion folder is a drop zone — ignore everything except the README
+# Ingestion folder is a drop zone — ignore everything except structure
 ingestion/*
 !ingestion/README.md
+!ingestion/meetings/
+!ingestion/calendar/
+ingestion/meetings/*
+ingestion/calendar/*
