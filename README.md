@@ -1,6 +1,7 @@
 # OpenClaw PM Bot — Workspace Template
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/ThomasDepole/openclaw-pm-bot-template/releases/tag/v1.0.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![OpenClaw](https://img.shields.io/badge/built%20on-OpenClaw-purple.svg)](https://docs.openclaw.ai)
 
 **A ready-to-deploy project management assistant built on [OpenClaw](https://docs.openclaw.ai).**
@@ -346,6 +347,7 @@ workspace/
 ├── README.md               ← You are here
 ├── CHANGELOG.md            ← Version history
 ├── VERSION                 ← Current version number
+├── LICENSE                 ← MIT License
 ├── SOUL.md                 ← Bot personality, communication style, PM judgment
 ├── IDENTITY.md             ← Name, role, company (fill in at setup)
 ├── AGENTS.md               ← Operating guide — how the bot works
