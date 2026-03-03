@@ -57,6 +57,25 @@ When asked to ingest files from `ingestion/`:
 
 ---
 
+## Ingestion Folder Structure
+
+The ingestion folder is organized into subfolders. Process each appropriately:
+
+| Folder | Content type | Memory target |
+|--------|-------------|---------------|
+| `meetings/` | Meeting notes, stand-ups, call summaries | `memory/meetings/`, `memory/projects.md`, RAID items, tasks |
+| `status-reports/` | Weekly/sprint status, health reports | `memory/projects.md` |
+| `projects/` | SOWs, briefs, RAID logs, change orders | `memory/projects.md`, `memory/clients.md` |
+| `people/` | Team rosters, org charts, stakeholder lists | `memory/people.md` |
+| `clients/` | Client overviews, account context | `memory/clients.md` |
+| `processes/` | SOPs, workflows, policies, standards | `memory/processes.md` |
+| `reference/` | Company overview, general context | `memory/company.md` |
+| `calendar/` | Calendar screenshots or exports | `memory/calendar.md` |
+
+When the user asks you to ingest, check all subfolders, not just the root.
+
+---
+
 ## Reading Binary Documents
 
 Office files (.docx, .xlsx, .pptx, .pdf) are binary — use the extractor:
