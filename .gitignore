@@ -1,0 +1,7 @@
+*.env
+.env
+*.secret
+
+# Ingestion folder is a drop zone — ignore everything except the README
+ingestion/*
+!ingestion/README.md
