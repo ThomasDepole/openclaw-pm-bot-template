@@ -94,22 +94,38 @@ When prompted to auto-open browser → if on a headless server, say `n` and use 
 
 ### Step 3: Authorize (Manual OAuth — for Headless Servers)
 
-If you can't open a browser on the server, authorize from your local machine:
+If you can't open a browser on the server, authorize from your local machine. There are two ways to get the token — pick one:
 
-**Option A: Using rclone on Windows/Mac locally**
+---
+
+**Option A: Using `rclone authorize` on your local machine (recommended)**
+
+Run this on your local Windows/Mac machine (not the server):
 ```powershell
 rclone authorize "dropbox" "YOUR_APP_KEY" "YOUR_APP_SECRET"
 ```
-> If you get a port binding error on Windows, use Option B instead.
 
-**Option B: Manual curl flow (works everywhere)**
+rclone opens a browser tab. Dropbox will display an **"Access Code Generated"** page — it does **not** redirect to localhost. The page looks like this:
+
+> *"Access Code Generated — Enter this code into [Your App Name] to finish the process"*
+> `yF7y6syKSRwAAAAAAAAEbN6iJh8_nGySFzGvgqwnivpc`
+
+Copy the code from that page and paste it into the rclone terminal when prompted. rclone will then output a **token blob** — a single line of JSON. Copy it. You'll use it in Step 5a.
+
+> If you get a port binding error on Windows (firewall blocking port 53682), use Option B instead.
+
+> ⚠️ **If you used `rclone config` wizard and entered the code there:** The wizard may have already written the token to your config file. That's fine — but **check the token JSON for the `expiry` field before proceeding**. The wizard often omits it, which breaks auto-refresh. See Step 5b.
+
+---
+
+**Option B: Manual curl flow (works everywhere, no rclone on local machine required)**
 
 1. Open this URL in your browser (replace `YOUR_APP_KEY`):
 ```
 https://www.dropbox.com/oauth2/authorize?client_id=YOUR_APP_KEY&response_type=code&token_access_type=offline
 ```
 
-2. Click **Continue** → **Allow**. You'll be redirected to `localhost:53682` which fails to load — that's expected. Copy the full URL from your browser address bar and extract the `code=` parameter value.
+2. Click **Continue** → **Allow**. Dropbox shows the same **"Access Code Generated"** page as Option A — copy the code displayed on screen.
 
 3. Exchange the code for tokens on the server:
 ```bash
@@ -127,26 +143,47 @@ curl -X POST https://api.dropbox.com/oauth2/token \
   "expires_in": 14400
 }
 ```
+Copy the `access_token` and `refresh_token` values — you'll need them in Step 5a.
 
-5. Edit your rclone config file and set the token:
+---
+
+**Step 5a — Paste the token into rclone.conf**
+
+Open the config file:
+```bash
+nano /path/to/rclone.conf
+```
+
+Build the token JSON and set it:
 ```ini
 [dropbox]
 type = dropbox
 client_id = YOUR_APP_KEY
 client_secret = YOUR_APP_SECRET
+token = {"access_token":"sl.u.ABC...","token_type":"bearer","refresh_token":"ABC..."}
+```
+
+- **If you used Option A:** rclone printed a ready-made token blob — paste it directly as the `token =` value.
+- **If you used Option B (curl):** Construct the JSON manually using `access_token` and `refresh_token` from the curl response. Do **not** include `expires_in` from the curl response — it's not used by rclone and can cause errors if stored incorrectly.
+
+---
+
+**Step 5b — Add the `expiry` field (required for auto-refresh)**
+
+Add `"expiry":"0001-01-01T00:00:00Z"` to the token JSON:
+```ini
 token = {"access_token":"sl.u.ABC...","token_type":"bearer","refresh_token":"ABC...","expiry":"0001-01-01T00:00:00Z"}
 ```
 
-> **Important:** Always get a `refresh_token` (via the curl flow above). Console-generated access tokens expire in ~4 hours and have no refresh token.
+**Why this is required:**
 
-> ⚠️ **`expiry` vs `expires_in` — critical distinction:**  
-> The OAuth response contains `"expires_in": 14400` (an integer — seconds until expiry). **Do not copy this field into your rclone config.** rclone uses a different field — `"expiry"` — which is an absolute UTC timestamp. This is what tells rclone when to use the refresh token.  
->  
-> Setting `"expiry":"0001-01-01T00:00:00Z"` (Go zero-time, always in the past) is intentional: it forces rclone to use the refresh token on the very first request, which exchanges it for a fresh access token and a properly-set `expiry`. From that point on, the refresh cycle is self-sustaining.  
->  
-> If you accidentally copy `expires_in` from the OAuth response and store it as a string (e.g. `"expires_in":"0001-01-01T00:00:00Z"`), rclone will fail immediately with:  
+rclone does not use `expires_in` (the integer from the OAuth response) to decide when to refresh. It uses `expiry` — an absolute UTC timestamp. Without this field, rclone assumes the access token is still valid, tries it blindly, and fails with `invalid_access_token/` without ever attempting to use the refresh token.
+
+Setting `expiry` to `"0001-01-01T00:00:00Z"` (Go zero-time, always in the past) forces rclone to use the refresh token on the very first request. rclone exchanges the refresh token for a fresh access token and rewrites the config with a correct `expiry` timestamp. From that point on, the refresh cycle is self-sustaining.
+
+> ⚠️ Do **not** copy `expires_in` from the OAuth curl response into your config. If it ends up stored as a string (e.g. `"expires_in":"0001-01-01T00:00:00Z"`), rclone will fail with:  
 > `json: cannot unmarshal string into Go struct field Token.expires_in of type int64`  
-> Fix: remove `expires_in` from the token JSON entirely and add `"expiry":"0001-01-01T00:00:00Z"` instead.
+> Fix: remove `expires_in` from the token JSON entirely. Only `expiry` belongs there.
 
 ---
 

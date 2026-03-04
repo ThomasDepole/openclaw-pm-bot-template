@@ -82,7 +82,7 @@ Since your server likely can't open a browser, authorize from your local machine
 https://www.dropbox.com/oauth2/authorize?client_id=YOUR_APP_KEY&response_type=code&token_access_type=offline
 ```
 
-**2.** Click **Continue** → **Allow**. Dropbox will redirect to `localhost:53682` which will fail — that's expected. Copy the full URL from your address bar and extract the value after `code=`.
+**2.** Click **Continue** → **Allow**. Dropbox displays an **"Access Code Generated"** page — it does **not** redirect to localhost. Copy the code shown on that page.
 
 **3.** On your server, exchange the code for tokens:
 ```bash
@@ -91,16 +91,25 @@ curl -X POST https://api.dropbox.com/oauth2/token \
   -d "code=PASTE_CODE_HERE&grant_type=authorization_code"
 ```
 
-**4.** The response includes an `access_token` and a `refresh_token`. Edit your rclone config file and add the token:
+**4a.** The response includes an `access_token` and a `refresh_token`. Edit your rclone config and paste those values in:
 ```ini
 [dropbox]
 type = dropbox
 client_id = YOUR_APP_KEY
 client_secret = YOUR_APP_SECRET
-token = {"access_token":"...","token_type":"bearer","refresh_token":"...","expiry":"0001-01-01T00:00:00Z"}
+token = {"access_token":"...","token_type":"bearer","refresh_token":"..."}
 ```
 
 > **Why the curl flow?** The console-generated token expires in ~4 hours and has no refresh token. The OAuth code exchange gives you a refresh token so rclone stays authorized indefinitely.
+
+> Do **not** include `expires_in` from the curl response in the token JSON.
+
+**4b.** Add the `expiry` field — this is required for auto-refresh to work:
+```ini
+token = {"access_token":"...","token_type":"bearer","refresh_token":"...","expiry":"0001-01-01T00:00:00Z"}
+```
+
+rclone uses `expiry` (an absolute UTC timestamp) — not `expires_in` — to decide when to refresh the access token. Without it, rclone tries the access token blindly on every request and fails with `invalid_access_token/` without ever attempting to use the refresh token. Setting it to `"0001-01-01T00:00:00Z"` (always in the past) forces rclone to use the refresh token immediately, after which it manages the cycle automatically. See `rclone-dropbox-setup.md` for full details.
 
 **5.** Test it:
 ```bash
