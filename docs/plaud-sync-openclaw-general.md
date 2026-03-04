@@ -217,6 +217,8 @@ The file content becomes exactly what your OpenClaw agent reads, so structure it
 | Token expires after a few hours | No refresh token (used console-generated token) | Redo auth using the manual OAuth curl flow |
 | Dropbox folder disappears after sync | Used `--delete-empty-src-dirs` | Remove that flag — it deletes empty source directories |
 | Zapier can't find the target folder | Folder was deleted from Dropbox | Recreate the folder manually or via rclone mkdir |
+| `json: cannot unmarshal string into Go struct field Token.expires_in of type int64` | Token config has `expires_in` set to a date string instead of an integer | Remove `expires_in` from the token JSON. Add `"expiry":"0001-01-01T00:00:00Z"` instead. See `rclone-dropbox-setup.md` Step 3. |
+| `expired_access_token/` or `invalid_access_token/` — no auto-refresh | `expiry` field missing from token JSON; rclone doesn't fall back to refresh token | Add `"expiry":"2000-01-01T00:00:00Z"` to the token JSON, then re-run. See `rclone-dropbox-setup.md` Troubleshooting for full fix steps. |
 
 ---
 

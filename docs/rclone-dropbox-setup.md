@@ -139,6 +139,15 @@ token = {"access_token":"sl.u.ABC...","token_type":"bearer","refresh_token":"ABC
 
 > **Important:** Always get a `refresh_token` (via the curl flow above). Console-generated access tokens expire in ~4 hours and have no refresh token.
 
+> ⚠️ **`expiry` vs `expires_in` — critical distinction:**  
+> The OAuth response contains `"expires_in": 14400` (an integer — seconds until expiry). **Do not copy this field into your rclone config.** rclone uses a different field — `"expiry"` — which is an absolute UTC timestamp. This is what tells rclone when to use the refresh token.  
+>  
+> Setting `"expiry":"0001-01-01T00:00:00Z"` (Go zero-time, always in the past) is intentional: it forces rclone to use the refresh token on the very first request, which exchanges it for a fresh access token and a properly-set `expiry`. From that point on, the refresh cycle is self-sustaining.  
+>  
+> If you accidentally copy `expires_in` from the OAuth response and store it as a string (e.g. `"expires_in":"0001-01-01T00:00:00Z"`), rclone will fail immediately with:  
+> `json: cannot unmarshal string into Go struct field Token.expires_in of type int64`  
+> Fix: remove `expires_in` from the token JSON entirely and add `"expiry":"0001-01-01T00:00:00Z"` instead.
+
 ---
 
 ### Step 4: Test the Connection
@@ -151,6 +160,40 @@ List a specific folder:
 ```bash
 rclone ls "dropbox:/MyFolder"
 ```
+
+---
+
+### Step 5: Verify Token Auto-Refresh (Recommended)
+
+Confirm that rclone will automatically refresh the access token when it expires. This catches config issues before they cause problems in production.
+
+**Corrupt just the access token (leave the refresh token intact):**
+```bash
+python3 -c "
+import re
+path = '/path/to/rclone.conf'
+with open(path, 'r') as f:
+    content = f.read()
+fixed = re.sub(r'(\"access_token\": \")[^\"]+', r'\1INVALID_TOKEN_REFRESH_TEST', content)
+with open(path, 'w') as f:
+    f.write(fixed)
+print('Access token corrupted — ready to test refresh')
+"
+```
+
+**Run any rclone command:**
+```bash
+rclone ls dropbox:/ --config /path/to/rclone.conf
+```
+
+- ✅ **Pass:** Command succeeds. rclone used the refresh token to get a fresh access token and rewrote the config with a new `expiry`.
+- ❌ **Fail:** `invalid_access_token/` error. The `expiry` field is missing or malformed — rclone tried the bad token and gave up instead of refreshing. See Troubleshooting below.
+
+**Confirm the token was updated:**
+```bash
+grep -o '"access_token": "[^"]*' /path/to/rclone.conf | head -c 60
+```
+It should no longer contain `INVALID_TOKEN_REFRESH_TEST`.
 
 ---
 
@@ -233,6 +276,9 @@ If you want to restrict rclone to a single Dropbox folder (for security):
 | Token expires after a few hours | No refresh token | Redo auth with `token_access_type=offline` in the auth URL |
 | Config not found | rclone using default path, not custom path | Set `RCLONE_CONFIG` env var or pass `--config` flag |
 | Files re-copied every run | Using `copy` or `sync` instead of `move` | Switch to `rclone move` for consume-once pipelines |
+| `json: cannot unmarshal string into Go struct field Token.expires_in of type int64` | Token config has `expires_in` set to a date string (e.g. `"0001-01-01T00:00:00Z"`) instead of an integer | Remove `expires_in` from the token JSON entirely. Add `"expiry":"0001-01-01T00:00:00Z"` if it isn't already present. See Step 3 note above. |
+| `expired_access_token/` or `invalid_access_token/` — no auto-refresh happening | `expiry` field is missing from token JSON; rclone tries the access token as-is and fails without falling back to the refresh token | Add `"expiry":"2000-01-01T00:00:00Z"` to the token JSON in rclone.conf, then re-run. rclone will use the refresh token, get a fresh access token, and rewrite the config with a proper expiry. |
+| `rclone config reconnect` works initially but breaks after restart | Token written by reconnect may be missing the `expiry` field | After reconnecting, check the token JSON in rclone.conf. If `expiry` is absent, add `"expiry":"2000-01-01T00:00:00Z"` manually, then run one rclone command to trigger a clean refresh cycle. Run the Step 5 verification test to confirm. |
 
 ---
 
