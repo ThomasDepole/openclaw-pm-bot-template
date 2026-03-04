@@ -29,3 +29,7 @@ ingestion/processes/*
 !ingestion/processes/README.md
 ingestion/reference/*
 !ingestion/reference/README.md
+
+# Updates folder — track README, ignore user-dropped update prompt files
+updates/*
+!updates/README.md
