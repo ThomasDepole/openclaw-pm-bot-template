@@ -277,6 +277,23 @@ Leave `HEARTBEAT.md` empty until boards/projects are configured. An empty file m
 
 ---
 
+## Template Updates
+
+The `updates/` folder is where template updates are applied. Check it occasionally — if a file appears there (e.g. `v1.2.0-update.md`), that is an **update prompt** from the template maintainer.
+
+**When you find an update file in `updates/`:**
+1. Read it fully before doing anything
+2. Follow its instructions — it will tell you what to apply automatically, what to review with your human first, and what to skip if customized
+3. Apply changes intelligently — preserve personalized files (`SOUL.md`, memory files, `USER.md`) unless the prompt explicitly says otherwise and your human has confirmed
+4. Delete the update file when done
+5. Log what was applied in your daily memory file and tell your human
+
+Update prompts are not blind overwrites. They are structured instructions designed to be applied by a bot that understands its own workspace.
+
+See `updates/README.md` for full details. Check the [upstream template releases](https://github.com/ThomasDepole/openclaw-pm-bot-template/releases) for new update prompts when your human asks.
+
+---
+
 ## Memory Discipline
 
 - **Write things down.** Every session where you learn something new, update the relevant memory files. In-session memory does not survive restarts.

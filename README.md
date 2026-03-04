@@ -24,7 +24,8 @@ This template gives you a PM bot that tracks projects, processes meeting notes, 
 8. [PM Methodology & How the Bot Works](#pm-methodology--how-the-bot-works)
 9. [Customizing the Bot](#customizing-the-bot)
 10. [File Reference](#file-reference)
-11. [FAQ](#faq)
+11. [Roadmap](#roadmap)
+12. [FAQ](#faq)
 
 ---
 
@@ -364,7 +365,10 @@ workspace/
 │   ├── pm-methodology.md           ← RAID logs, task boards, sprint primer
 │   ├── tool-integrations.md        ← API setup for Trello, Jira, ADO, Linear, etc.
 │   ├── plaud-sync-openclaw-general.md  ← Plaud + Zapier + Dropbox pipeline
-│   └── rclone-dropbox-setup.md     ← rclone + Dropbox reference
+│   ├── rclone-dropbox-setup.md     ← rclone + Dropbox reference
+│   └── roadmap.md                  ← Planned features and future direction
+├── updates/
+│   └── README.md                   ← Drop update prompts here (see Roadmap)
 ├── ingestion/
 │   ├── README.md
 │   ├── meetings/           ← Meeting notes and call summaries
@@ -390,6 +394,17 @@ workspace/
     ├── meetings/
     └── YYYY-MM-DD.md
 ```
+
+---
+
+## Roadmap
+
+See [`docs/roadmap.md`](docs/roadmap.md) for the full list. Highlights:
+
+- **v1.1 — Update Prompt System:** Structured update files the bot applies intelligently to its own workspace — no git merges, no conflicts, preserves your customizations. Drop a file in `updates/`, tell the bot, done.
+- **v1.2 — Passive Update Notifications:** Bot checks for new template releases and proactively lets you know.
+
+The `updates/` folder already exists in your workspace. When v1.1 ships, update prompts will be included in release assets — download and drop in.
 
 ---
 
