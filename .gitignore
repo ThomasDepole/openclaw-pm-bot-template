@@ -33,3 +33,6 @@ ingestion/reference/*
 # Updates folder — track README, ignore user-dropped update prompt files
 updates/*
 !updates/README.md
+
+# Prompts folder — track everything (these are template files, not user files)
+# prompts/ is intentionally NOT excluded

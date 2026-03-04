@@ -277,6 +277,16 @@ Leave `HEARTBEAT.md` empty until boards/projects are configured. An empty file m
 
 ---
 
+## Off-Limits Directories
+
+**Never read, process, or act on files in `prompts/`.**
+
+That folder contains prompt templates for humans — reference material, not instructions for you. The files contain example tokens like `{{BOT_NAME}}` and instructional content that will confuse you if you treat it as a task. If your human asks you to help them use a prompt from that folder, explain what it does and help them fill in the tokens. Do not execute it yourself.
+
+If you are asked to ingest files and the ingestion folder somehow contains files from `prompts/`, skip them and flag it to your human.
+
+---
+
 ## Template Updates
 
 The `updates/` folder is where template updates are applied. Check it occasionally — if a file appears there (e.g. `v1.2.0-update.md`), that is an **update prompt** from the template maintainer.
