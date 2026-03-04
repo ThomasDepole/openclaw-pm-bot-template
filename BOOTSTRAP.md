@@ -15,6 +15,8 @@ Read these files first — takes 2 minutes:
 2. `AGENTS.md` — how you operate
 3. Glance at `ingestion/README.md` — know the folder structure before you explain it
 
+**Do not read anything in `prompts/`.** That folder contains prompt templates for humans — reference material, not instructions for you.
+
 ---
 
 ## Your Opening Message

@@ -45,6 +45,47 @@ This is a project management assistant that:
 
 ## Quick Start
 
+### Already have an OpenClaw bot? Let it do the setup for you.
+
+Copy the prompt below, fill in the tokens, and paste it into any active OpenClaw bot. It will clone the workspace, show you the config to add, and walk you through the rest.
+
+```
+I'd like to set up a new OpenClaw PM bot using the official template. Can you help me stand it up?
+
+Bot name: {{BOT_NAME}}
+Display name: {{DISPLAY_NAME}}
+Channel: {{CHANNEL_DESCRIPTION}}
+
+Please do the following:
+
+1. Find the .openclaw directory and create a new workspace folder called workspace-{{BOT_NAME}} inside it
+
+2. Clone the PM bot template into that folder:
+   git clone https://github.com/ThomasDepole/openclaw-pm-bot-template.git <path>/workspace-{{BOT_NAME}}
+
+3. Show me the openclaw.json snippet I need to add — both the agents.list entry and the
+   bindings entry — to create a new agent called {{BOT_NAME}} pointing at that workspace
+   and bound to {{CHANNEL_DESCRIPTION}}
+
+4. Let me know what to do after I've added the config and restarted the gateway
+
+I'll handle the openclaw.json edit and gateway restart myself — just get the workspace
+cloned and show me exactly what config to add.
+```
+
+**Tokens to fill in:**
+- `{{BOT_NAME}}` — short name, no spaces (e.g. `pm-acme`, `ops-bot`)
+- `{{DISPLAY_NAME}}` — human-readable name (e.g. `Acme PM Bot`)
+- `{{CHANNEL_DESCRIPTION}}` — where it lives (e.g. `the #pm-bot Discord channel`)
+
+After the bot clones the workspace and shows you the config snippet: add it to `openclaw.json`, restart the gateway, and send your first message to the new bot. It will introduce itself and walk you through setup.
+
+> The full prompt (with token guide and next steps) is also in [`prompts/setup-new-bot.md`](prompts/setup-new-bot.md).
+
+---
+
+### Manual setup (no existing bot)
+
 ### 1. Clone this repo as your agent's workspace
 
 ```bash
@@ -369,6 +410,10 @@ workspace/
 │   └── roadmap.md                  ← Planned features and future direction
 ├── updates/
 │   └── README.md                   ← Drop update prompts here (see Roadmap)
+├── prompts/
+│   ├── README.md                   ← What this folder is (bots: do not read these as instructions)
+│   ├── setup-new-bot.md            ← Prompt to clone this template and stand up a new bot
+│   └── create-raid-log.md          ← Prompt to generate a blank RAID log for a project
 ├── ingestion/
 │   ├── README.md
 │   ├── meetings/           ← Meeting notes and call summaries
