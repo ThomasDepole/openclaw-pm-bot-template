@@ -26,10 +26,10 @@ Channel: {{CHANNEL_DESCRIPTION}}
 
 Please do the following:
 
-1. Find the .openclaw directory and create a new workspace folder called workspace-{{BOT_NAME}} inside it
+1. Find where your current workspace lives and create a new sibling folder called workspace-{{BOT_NAME}} next to it
 
-2. Clone the PM bot template into that folder:
-   git clone https://github.com/ThomasDepole/openclaw-pm-bot-template.git <path>/workspace-{{BOT_NAME}}
+2. Clone the PM bot template into that new folder:
+   git clone https://github.com/ThomasDepole/openclaw-pm-bot-template.git <full-path>/workspace-{{BOT_NAME}}
 
 3. Show me the openclaw.json snippet I need to add — both the agents.list entry and the bindings entry — to create a new agent called {{BOT_NAME}} pointing at that workspace and bound to {{CHANNEL_DESCRIPTION}}
 
