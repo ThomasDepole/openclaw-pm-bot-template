@@ -235,39 +235,108 @@ ingestion/
 
 ## The Memory System
 
-Everything the bot learns lives in the `memory/` folder. These files are the permanent record — source files are deleted after ingestion.
+Everything the bot learns lives in the `memory/` folder. These files are the permanent record — source files are deleted after ingestion. Understanding what goes where helps you know where to look when you want to verify what the bot knows.
 
 ```
 memory/
-├── company.md          ← What the company does, structure, services
-├── clients.md          ← Client notes, context, key contacts
-├── projects.md         ← Active and past projects — status, team, timeline
-├── people.md           ← Team and stakeholder profiles
+├── MEMORY.md           ← (at workspace root) Fast-load reference: active projects, key IDs, standing rules
+├── company.md          ← What the company does, structure, services, revenue
+├── clients.md          ← One section per client — status, open items, key contacts
+├── projects.md         ← Project tracking + naming conventions / lookup table
+├── project-status.md   ← Running status snapshot across all active projects
+├── people.md           ← External contacts, stakeholders, client-side people
+├── roles.md            ← Formal role definitions and reporting structure
 ├── processes.md        ← How things work — workflows, standards, methodologies
-├── calendar.md         ← Upcoming and recent meetings
-├── decisions.md        ← Key decisions that affected scope/cost/timeline
-├── task-board.md       ← Task management tool configuration
-├── raid-pending.md     ← RAID items flagged from meetings, pending review
+├── calendar.md         ← Meeting schedule built from calendar inputs
+├── decisions.md        ← Key decisions that affected scope, cost, or timeline
+├── task-board.md       ← Task management tool configuration (board/list/label IDs)
+├── raid-pending.md     ← RAID items flagged from meetings, pending your review
+├── raid-logs.md        ← Snapshot of actual RAID log state per project
 ├── open-questions.md   ← Things that are unclear or need follow-up
 ├── ingestion-log.md    ← Log of every file processed — what, when, what was in it
-├── meetings/           ← Processed meeting summaries (one file per meeting)
-└── YYYY-MM-DD.md       ← Daily session logs
+├── team/               ← One file per team member (roles, strengths, what they own)
+├── personal/           ← Personal context for the primary user (kept separate from work)
+├── extracted/          ← Raw extraction output from documents (source reference)
+├── meetings/           ← Processed meeting summaries (one file per meeting, 5-10 bullets)
+└── YYYY-MM-DD.md       ← Daily session logs — what happened, what was decided
 ```
+
+### What each file is for
+
+**The fast-load reference**
+
+`MEMORY.md` lives at the workspace root (not in `memory/`). Every session — including background sub-agents — reads this first. It's a cheat sheet: active projects, key people, task board IDs, standing rules. Keep it current. A stale `MEMORY.md` means every session starts with outdated context.
+
+**Company & client knowledge**
+
+| File | What's in it |
+|------|-------------|
+| `company.md` | What the company does, who it serves, revenue, strategic direction |
+| `clients.md` | One section per client — project status, open items, key contacts, RAID highlights |
+| `projects.md` | Active and past projects plus the **naming conventions / lookup table** — cross-referenced whenever a project name is ambiguous or potentially misspelled |
+| `project-status.md` | Running status snapshot updated with every status report ingestion — more current than `projects.md` |
+
+**People**
+
+| File | What's in it |
+|------|-------------|
+| `people.md` | Client contacts, external stakeholders, anyone outside the team |
+| `team/[name].md` | One file per team member — role, strengths, what they own, working notes |
+| `roles.md` | Formal role definitions and reporting structure |
+| `personal/` | Personal context for the primary user — kept separate from work content |
+
+**Meeting & calendar tracking**
+
+| File | What's in it |
+|------|-------------|
+| `calendar.md` | Canonical meeting schedule from calendar inputs — used to resolve informal meeting references ("the Monday sync") to real events with attendees |
+| `meetings/YYYY-MM-DD-name.md` | One file per processed meeting — 5-10 bullet distillation (who, what was decided, what's moving, what's blocked). The record after source notes are deleted. |
+
+**RAID & risk tracking**
+
+| File | What's in it |
+|------|-------------|
+| `raid-pending.md` | Proposed RAID log changes flagged from meetings — not yet applied to actual logs. Review these and confirm when applied. |
+| `raid-logs.md` | Snapshot of each project's actual RAID log state (open item counts, critical items, last updated). Updated when RAID log files are ingested. |
+
+**Process & reference**
+
+| File | What's in it |
+|------|-------------|
+| `processes.md` | How things work here — PM process, escalation paths, standards |
+| `decisions.md` | Significant decisions affecting scope, cost, timeline, or process — the "why did we do it this way" file |
+| `task-board.md` | Task management tool configuration — board IDs, list IDs, label IDs |
+
+**Logs & system state**
+
+| File | What's in it |
+|------|-------------|
+| `YYYY-MM-DD.md` | Daily session logs — what happened, decisions made, what's open |
+| `ingestion-log.md` | Every file processed: filename, date, summary of what was in it |
+| `extracted/` | Raw extraction output kept as source reference — distilled content lives in `project-status.md` and `clients.md` |
+| `heartbeat-state.json` | System timestamps for heartbeat checks — not for human editing |
 
 ### How memory works across sessions
 
-The bot starts each session fresh — it doesn't retain in-session memory between conversations. The memory files are how it persists. Before responding to anything, it reads its memory files to rebuild context.
+The bot starts each session fresh — no in-session memory carries over between conversations. The memory files are how it persists. At the start of every session it reads `MEMORY.md` and relevant memory files to rebuild context.
 
-This means:
+**Key implications:**
 - Important information must be written to a file to survive a session restart
-- The more thorough the memory files are, the faster the bot gets up to speed
-- The `ingestion-log.md` tells you exactly what the bot has processed
+- The more current your memory files are, the faster and smarter every session starts
+- Sub-agents spawned for background work (like ingestion) get the same memory files — they don't need to be re-briefed if the files are well-maintained
+- `ingestion-log.md` is your audit trail — it tells you exactly what the bot has processed and when
+
+### The naming conventions lookup
+
+One of the most important parts of `memory/projects.md` is the **Naming Conventions / Lookups & Mappings** section. AI meeting recorders frequently mishear or misspell project names. The bot cross-references this table on every ingestion to correct misspellings before writing to memory. If it can't match a name, it flags it to you rather than guessing.
+
+Populate this table early — especially if your team uses internal nicknames, Jira codes, or if you use an AI recorder. It pays off quickly.
 
 ### The RAID pending workflow
 
-When the bot processes a meeting and identifies a risk, action, issue, or decision that should be tracked, it adds it to `memory/raid-pending.md` rather than editing your actual RAID log directly. This gives you a review step before anything gets committed.
+When the bot processes a meeting and identifies a risk, action, issue, or decision that should be in a RAID log, it adds it to `memory/raid-pending.md` rather than editing your actual RAID log directly. This gives you a review step before anything gets committed.
 
-When you've reviewed and applied an item to your real RAID log, tell the bot — it will archive the entry.
+When you've reviewed and applied an item to your real RAID log, tell the bot — it archives the entry. When you drop an actual RAID log file into `ingestion/raid-logs/`, the bot compares it against pending items and auto-archives anything now reflected in the log.
 
 ---
 
@@ -427,17 +496,24 @@ workspace/
 └── memory/
     ├── company.md
     ├── clients.md
-    ├── projects.md
+    ├── projects.md          ← includes naming conventions / lookup table
+    ├── project-status.md
     ├── people.md
+    ├── roles.md
     ├── processes.md
     ├── calendar.md
     ├── decisions.md
     ├── task-board.md
     ├── raid-pending.md
+    ├── raid-logs.md
     ├── open-questions.md
     ├── ingestion-log.md
-    ├── meetings/
-    └── YYYY-MM-DD.md
+    ├── heartbeat-state.json
+    ├── team/                ← one file per team member
+    ├── personal/            ← personal context, kept separate from work
+    ├── extracted/           ← raw extraction output (source reference)
+    ├── meetings/            ← processed meeting summaries
+    └── YYYY-MM-DD.md        ← daily session logs
 ```
 
 ---
