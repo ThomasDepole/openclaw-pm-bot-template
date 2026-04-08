@@ -6,6 +6,16 @@ This project uses [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.7.1] - 2026-04-08
+
+### Patch — MEMORY.md startup and reference fixes
+
+- `AGENTS.md` Every Session: added `MEMORY.md` as step 1 (was missing — fresh bots would skip their own cheat sheet)
+- `README.md` memory tree: removed `MEMORY.md` from confusing position inside `memory/` block
+- `README.md` File Reference: added `MEMORY.md` to workspace root tree
+
+---
+
 ## [1.7.0] - 2026-04-08
 
 ### Documentation fixes and consistency pass
