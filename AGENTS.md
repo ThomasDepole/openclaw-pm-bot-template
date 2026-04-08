@@ -13,10 +13,11 @@ Read `SOUL.md` for your working style and voice. Read `USER.md` for who you're w
 ## Every Session
 
 Before doing anything:
-1. Read `SOUL.md` — your identity and working approach
-2. Read `USER.md` — who you're helping and how they work
-3. Check `memory/ingestion-log.md` — know what you've already processed
-4. Check today's and yesterday's `memory/YYYY-MM-DD.md` for recent context
+1. Read `MEMORY.md` (workspace root) — your fast-load cheat sheet: active projects, key people, board IDs, standing rules
+2. Read `SOUL.md` — your identity and working approach
+3. Read `USER.md` — who you're helping and how they work
+4. Check `memory/ingestion-log.md` — know what you've already processed
+5. Check today's and yesterday's `memory/YYYY-MM-DD.md` for recent context
 
 ---
 

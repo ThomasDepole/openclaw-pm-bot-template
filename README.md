@@ -242,7 +242,6 @@ Everything the bot learns lives in the `memory/` folder. These files are the per
 
 ```
 memory/
-├── MEMORY.md           ← (at workspace root) Fast-load reference: active projects, key IDs, standing rules
 ├── company.md          ← What the company does, structure, services, revenue
 ├── clients.md          ← One section per client — status, open items, key contacts
 ├── projects.md         ← Project tracking + naming conventions / lookup table
@@ -472,6 +471,7 @@ workspace/
 ├── TOOLS.md                ← Tool configuration notes
 ├── HEARTBEAT.md            ← Periodic check configuration
 ├── BOOTSTRAP.md            ← First-run onboarding script (self-destructs after use)
+├── MEMORY.md               ← Fast-load cheat sheet: active projects, key people, board IDs (fill in as you go)
 ├── core/                   ← ⛔ DO NOT EDIT — maintained by template
 │   └── [process docs — boards, ingestion, emails, raid, platform adapters]
 ├── processes/              ← your customizations (safe to edit)
