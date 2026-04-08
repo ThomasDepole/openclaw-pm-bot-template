@@ -6,6 +6,36 @@ This project uses [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.7.0] - 2026-04-08
+
+### Documentation fixes and consistency pass
+
+**Stale `memory/task-board.md` references removed (7 locations)**
+- `TOOLS.md` — board IDs pointer updated to `memory/boards/active/[board-name].md`
+- `README.md` — 4 references updated (memory tree ×2, setup step, memory table row)
+- `docs/setup-guide.md` — Step 2 item 4 and troubleshooting row updated
+
+**README.md**
+- Version badge updated to `1.6.0`
+- Ingestion folder tree: added `raid-logs/`
+- "What goes where" section: added `raid-logs/` entry with description
+- File Reference tree: added `core/`, `processes/`, `tools/` sections; memory section now includes `naming-conventions.md`, `boards/active/`, `heartbeat-state.json`; removed `task-board.md`
+
+**AGENTS.md**
+- Memory structure diagram ingestion section: expanded from 3 to all 9 subfolders; removed non-existent `weekly-plans/`
+- Memory structure diagram memory section: added `project-status.md`, `roles.md`, `heartbeat-state.json`, `personal/`, `extracted/`
+- Credentials example: hardcoded workspace path replaced with generic placeholder + comment
+
+**`.env.example`** — added `NOTION_TOKEN` and `PLANNER_*` credential blocks
+
+**`docs/ingestion-guide.md`** — replaced 3-row "dump in root" table with proper 9-subfolder table matching actual structure
+
+**`IDENTITY.md`** — added Visual Identity section pointing to `self-portrait/` folder
+
+**`scripts/README.md`** (new) — explains extraction script lives at system level, not here; notes folder is available for custom deployment scripts
+
+---
+
 ## [1.6.0] - 2026-04-08
 
 ### Cleanup, ingestion fixes, and integration docs

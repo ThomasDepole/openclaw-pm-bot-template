@@ -20,11 +20,19 @@ That's it. The more you feed in, the smarter it gets.
 
 ## Where to Drop Files
 
-| What | Where |
-|------|-------|
-| Company docs, project status reports, client lists, process docs, RAID logs, spreadsheets | `ingestion/` (root) |
-| Meeting notes, call summaries, scrum notes, stand-up logs | `ingestion/meetings/` |
-| Calendar screenshots (for matching meetings to notes) | `ingestion/calendar/` |
+| Folder | What goes here |
+|--------|----------------|
+| `ingestion/meetings/` | Meeting notes, call summaries, scrum notes, AI transcripts |
+| `ingestion/status-reports/` | Weekly/sprint status updates, project health reports |
+| `ingestion/projects/` | SOWs, project briefs, charters, change orders |
+| `ingestion/people/` | Team rosters, org charts, stakeholder lists |
+| `ingestion/clients/` | Client overviews, account context, key contacts |
+| `ingestion/processes/` | SOPs, workflows, policies, standards, methodologies |
+| `ingestion/reference/` | Company overview, general context, anything else |
+| `ingestion/calendar/` | Calendar screenshots or exports |
+| `ingestion/raid-logs/` | RAID log files (authoritative current version) |
+
+*Each subfolder has a `README.md` with more detail on what belongs there and tips for that file type.*
 
 ---
 

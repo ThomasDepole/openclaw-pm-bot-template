@@ -40,7 +40,7 @@ The agent can create action items in any major task tool. Pick one and configure
    TOOL_API_KEY=your_key_here
    TOOL_TOKEN=your_token_here
    ```
-4. **Record board/project structure in `memory/task-board.md`** — board names, IDs, column/list IDs
+4. **Record board/project structure in `memory/boards/active/[board-name].md`** — use the template in `memory/boards/active/README.md` as a starting point
 5. **Update `TOOLS.md`** with your tool name and credential env var names
 6. **Update the "Creating Tasks" section in `AGENTS.md`** with your actual API commands
 
@@ -125,7 +125,7 @@ The `.gitignore` already excludes `.env` — credentials won't be committed.
 | Issue | Fix |
 |-------|-----|
 | Agent doesn't know about a client/project | Drop the relevant docs in `ingestion/` and ask it to ingest |
-| Task creation failing | Check `.env` credentials and board IDs in `memory/task-board.md` |
+| Task creation failing | Check `.env` credentials and board IDs in `memory/boards/active/` |
 | Agent lost context after restart | Normal — it reads from memory files on startup. Make sure important info is written to `memory/` |
 | Binary file won't read | Use `python3 /home/node/.openclaw/scripts/extract-doc.py ingestion/<filename>` |
 | extract-doc.py fails with import error | Run `pip3 install python-docx openpyxl python-pptx pdfplumber pandas --break-system-packages -q` |

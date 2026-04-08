@@ -14,7 +14,7 @@ This file is for your environment-specific setup. Fill it in as you configure in
 
 **Credentials:** Stored in `.env` as `[FILL IN: env var names]`
 
-**Board/Project IDs:** See `memory/task-board.md`
+**Board/Project IDs:** See `memory/boards/active/[board-name].md`
 
 ---
 

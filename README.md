@@ -1,6 +1,6 @@
 # OpenClaw PM Bot — Workspace Template
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/ThomasDepole/openclaw-pm-bot-template/releases/tag/v1.0.0)
+[![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](https://github.com/ThomasDepole/openclaw-pm-bot-template/releases/tag/v1.6.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![OpenClaw](https://img.shields.io/badge/built%20on-OpenClaw-purple.svg)](https://docs.openclaw.ai)
 
@@ -210,7 +210,8 @@ ingestion/
 ├── clients/                ← Client overviews, account context
 ├── processes/              ← SOPs, workflows, policies, standards
 ├── reference/              ← Company overview, general context, catch-all
-└── calendar/               ← Calendar exports/screenshots (optional)
+├── calendar/               ← Calendar exports/screenshots (optional)
+└── raid-logs/              ← Actual RAID log files (authoritative current version)
 ```
 
 ### What goes where — quick reference
@@ -231,6 +232,8 @@ ingestion/
 
 **`calendar/`** — Optional. Screenshots or exports of your calendar help the bot match informal meeting references ("the Monday sync") to real events with attendees and times. Skip this if you're not comfortable sharing calendar data.
 
+**`raid-logs/`** — Actual RAID log files (`.xlsx`, `.docx`, etc.) treated as the authoritative current version. The bot compares against pending proposed changes in `memory/raid-pending.md` and updates the snapshot in `memory/raid-logs.md`.
+
 ---
 
 ## The Memory System
@@ -249,11 +252,14 @@ memory/
 ├── processes.md        ← How things work — workflows, standards, methodologies
 ├── calendar.md         ← Meeting schedule built from calendar inputs
 ├── decisions.md        ← Key decisions that affected scope, cost, or timeline
-├── task-board.md       ← Task management tool configuration (board/list/label IDs)
+├── naming-conventions.md ← Transcription error corrections; cross-referenced on every ingestion
 ├── raid-pending.md     ← RAID items flagged from meetings, pending your review
 ├── raid-logs.md        ← Snapshot of actual RAID log state per project
 ├── open-questions.md   ← Things that are unclear or need follow-up
 ├── ingestion-log.md    ← Log of every file processed — what, when, what was in it
+├── heartbeat-state.json ← Heartbeat run timestamps (system — do not edit)
+├── boards/
+│   └── active/         ← One .md per configured board (IDs, lists, labels, routing)
 ├── team/               ← One file per team member (roles, strengths, what they own)
 ├── personal/           ← Personal context for the primary user (kept separate from work)
 ├── extracted/          ← Raw extraction output from documents (source reference)
@@ -305,7 +311,7 @@ memory/
 |------|-------------|
 | `processes.md` | How things work here — PM process, escalation paths, standards |
 | `decisions.md` | Significant decisions affecting scope, cost, timeline, or process — the "why did we do it this way" file |
-| `task-board.md` | Task management tool configuration — board IDs, list IDs, label IDs |
+| `boards/active/[board-name].md` | Board IDs, list IDs, label IDs and routing rules for each configured board |
 
 **Logs & system state**
 
@@ -362,7 +368,7 @@ The bot can create action items automatically in your task management tool when 
 1. **Choose your tool** and note it in `TOOLS.md`
 2. **Get API credentials** — see `docs/tool-integrations.md` for step-by-step instructions for each tool
 3. **Store credentials in `.env`** — copy `.env.example` to `.env` and fill in your values (`.env` is git-ignored)
-4. **Record board/project IDs** in `memory/task-board.md`
+4. **Record board/project IDs** in `memory/boards/active/[board-name].md` — the template in `memory/boards/active/README.md` shows the format
 5. **Update the task creation commands** in `AGENTS.md` with your real API calls
 
 Until this is configured, the bot will describe action items in plain text and ask you to create them manually.
@@ -466,6 +472,13 @@ workspace/
 ├── TOOLS.md                ← Tool configuration notes
 ├── HEARTBEAT.md            ← Periodic check configuration
 ├── BOOTSTRAP.md            ← First-run onboarding script (self-destructs after use)
+├── core/                   ← ⛔ DO NOT EDIT — maintained by template
+│   └── [process docs — boards, ingestion, emails, raid, platform adapters]
+├── processes/              ← your customizations (safe to edit)
+│   └── [pointer files + your rules]
+├── tools/                  ← runnable platform helper scripts
+│   ├── notion.sh
+│   └── planner.py
 ├── .env                    ← API credentials (git-ignored — copy from .env.example)
 ├── .env.example            ← Credential template
 ├── .gitignore
@@ -492,7 +505,8 @@ workspace/
 │   ├── clients/            ← Client overviews, account context
 │   ├── processes/          ← SOPs, workflows, policies, standards
 │   ├── reference/          ← Company overview, general context
-│   └── calendar/           ← Calendar exports (optional)
+│   ├── calendar/           ← Calendar exports (optional)
+│   └── raid-logs/
 └── memory/
     ├── company.md
     ├── clients.md
@@ -503,12 +517,14 @@ workspace/
     ├── processes.md
     ├── calendar.md
     ├── decisions.md
-    ├── task-board.md
+    ├── naming-conventions.md
     ├── raid-pending.md
     ├── raid-logs.md
     ├── open-questions.md
     ├── ingestion-log.md
     ├── heartbeat-state.json
+    ├── boards/
+    │   └── active/          ← one .md per configured board (IDs, lists, labels)
     ├── team/                ← one file per team member
     ├── personal/            ← personal context, kept separate from work
     ├── extracted/           ← raw extraction output (source reference)

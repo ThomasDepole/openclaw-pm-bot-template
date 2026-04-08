@@ -195,10 +195,15 @@ workspace/
 │   └── planner.py
 ├── ingestion/
 │   ├── README.md
-│   ├── meetings/
-│   ├── calendar/
-│   ├── raid-logs/
-│   └── weekly-plans/
+│   ├── meetings/           ← Meeting notes and call summaries
+│   ├── status-reports/     ← Weekly/sprint status updates
+│   ├── projects/           ← SOWs, briefs, change orders
+│   ├── people/             ← Team rosters, stakeholder lists
+│   ├── clients/            ← Client overviews, account context
+│   ├── processes/          ← SOPs, workflows, policies
+│   ├── reference/          ← Company overview, general context
+│   ├── calendar/           ← Calendar exports (optional)
+│   └── raid-logs/          ← RAID log files (authoritative current version)
 ├── docs/                   ← reference guides
 └── memory/
     ├── ingestion-log.md
@@ -206,17 +211,22 @@ workspace/
     ├── company.md
     ├── clients.md
     ├── projects.md
+    ├── project-status.md
     ├── people.md
+    ├── roles.md
     ├── processes.md
     ├── open-questions.md
     ├── calendar.md
     ├── decisions.md
     ├── raid-pending.md
     ├── raid-logs.md
+    ├── heartbeat-state.json
     ├── boards/
     │   └── active/         ← one .md per configured board (IDs, lists, labels)
     ├── meetings/
     ├── team/
+    ├── personal/
+    ├── extracted/
     └── YYYY-MM-DD.md
 ```
 
@@ -248,7 +258,8 @@ JIRA_BASE_URL=https://yourcompany.atlassian.net
 
 Load them in shell commands:
 ```bash
-source /home/node/.openclaw/workspace/.env
+source /path/to/your/workspace/.env
+# (adjust to match your actual workspace path, e.g. /home/node/.openclaw/workspace-yourname/.env)
 ```
 
 Or reference them directly if they're loaded into the environment by your OpenClaw config.

@@ -10,3 +10,9 @@
 ---
 
 Currently building my knowledge base. Ask me to ingest files from the `ingestion/` folder to fill in my context.
+
+---
+
+## Visual Identity (Optional)
+
+If you want to give your agent a visual persona (profile image, avatar), see the `self-portrait/` folder at the workspace root. It contains a README with instructions for uploading a profile image to your configured channels.
