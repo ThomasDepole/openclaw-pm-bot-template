@@ -1,63 +1,52 @@
 # processes/
 
-Core PM workflow documents. The agent reads these before performing specific operations.
+Your workspace-specific process customizations.
+
+Files here extend the core process docs in `core/`. Each file:
+1. Points to the relevant `core/` file (read that first)
+2. Provides a section for your deployment-specific rules, overrides, and config
 
 ---
 
-## What's Here
+## How It Works
+
+```
+core/ingestion.md        ← generic, maintained by template (DO NOT EDIT)
+processes/ingestion.md   ← your deployment: "read core first, then my rules"
+```
+
+The agent reads `processes/[file].md` when it needs to perform an operation.
+That file tells it to load the core doc first, then applies your customizations on top.
+
+---
+
+## Files Here
 
 ### Generic interface
 | File | Purpose |
 |------|---------|
-| `boards.md` | Platform-agnostic board concepts: card naming, routing, checklists, labels, two-way handoff |
-| `ingestion.md` | All ingestion workflows: documents, meeting notes, calendar, RAID logs, weekly plans |
-| `emails.md` | Email drafting, routing rules, proxy card format |
-| `raid.md` | RAID log methodology, pending workflow, item identification |
+| `boards.md` | Active platform config + custom routing rules |
+| `ingestion.md` | Meeting tool config + custom ingestion sources |
+| `emails.md` | Routing rules + delivery method |
+| `raid.md` | Project-specific RAID rules |
 
 ### Platform adapters
 | File | Purpose |
 |------|---------|
-| `boards.trello.md` | Trello curl command reference |
-| `boards.notion.md` | Notion REST API adapter + `tools/notion.sh` reference |
-| `boards.planner.md` | Microsoft Planner Graph API adapter + `tools/planner.py` reference |
-| `boards.jira.md` | Jira stub — configure when ready |
+| `boards.trello.md` | Trello workspace notes |
+| `boards.notion.md` | Notion workspace notes |
+| `boards.planner.md` | Planner workspace notes |
+| `boards.jira.md` | Jira configuration (fill in when setting up) |
 
 ---
 
-## ⚠️ Do Not Edit Core Files
+## Adding Custom Processes
 
-Files in this folder are **core process documents**. They ship with the template and will be updated in future template versions.
+Need a process that isn't covered by a core file? Add it directly here.
+Name it clearly: `processes/[topic].md`. No need to mirror it in `core/`.
 
-**Do not customize them directly.** If you edit them, your changes will be overwritten on the next template upgrade.
+Document it below:
 
-**Instead:**
-- For workspace-specific config (board IDs, contact names, routing rules, naming corrections): use the `memory/` files
-- For process overrides or additions specific to your deployment: use `memory/processes.md` to document exceptions and local rules
+### Custom Processes
 
-The clean separation is:
-- `processes/` — **how** things work (generic, durable, upgradeable)
-- `memory/` — **what** things are in your specific deployment (IDs, names, routing, decisions)
-
----
-
-## Customizing Platform Adapters
-
-`boards.trello.md`, `boards.notion.md`, and `boards.planner.md` document API patterns.
-Board-specific IDs (board IDs, list IDs, label IDs) do **not** go in these files.
-They go in `memory/boards/active/[board-name].md`.
-
-`boards.jira.md` is a stub — fill it in when you configure Jira. Once configured,
-treat it as yours and do not expect future template upgrades to overwrite it.
-
----
-
-## Extending for Your Deployment
-
-If you need a custom process that doesn't fit in `memory/`:
-
-1. Create a new file in `processes/` with a name that makes its scope clear
-2. Keep the `<!-- core process -->` comment off your custom files — helps distinguish them at a glance
-3. Document it in this README under a "Custom Processes" section below
-
-There is no enforced separation mechanism today — it's convention-based. A more formal
-custom override pattern may be introduced in a future template version.
+<!-- Add your custom process files here as you create them. -->

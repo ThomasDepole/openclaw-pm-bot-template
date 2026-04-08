@@ -6,6 +6,39 @@ This project uses [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.5.0] - 2026-04-08
+
+### Core/processes architecture refactor
+
+**New: `core/` folder — untouchable process docs**
+- All 8 process docs moved to `core/` with DO NOT EDIT headers
+- `core/README.md` — explains the folder, links to processes/, notes for developers
+- Files: `boards.md`, `boards.trello.md`, `boards.notion.md`, `boards.planner.md`, `boards.jira.md`, `ingestion.md`, `emails.md`, `raid.md`
+
+**Refactored: `processes/` — thin pointer + customization layer**
+- Each file now says "read core/X.md first" then provides a user customization section
+- `boards.md` — active platform config + custom routing
+- `boards.trello/notion/planner/jira.md` — workspace notes + adapter-specific config
+- `ingestion.md` — meeting tool + custom sources
+- `emails.md` — routing rules + delivery method
+- `raid.md` — project-specific RAID rules
+- `README.md` — updated to explain two-layer pattern + how to add custom processes
+
+**Updated: `AGENTS.md`**
+- Prominent `⛔ core/` off-limits notice added
+- Board/task management section updated to reference new structure
+- Off-limits section updated to include core/
+- Memory structure diagram updated
+
+**Memory folder cleanup**
+- Removed `memory/task-board.md` (replaced by `memory/boards/active/`)
+- Removed `memory/trello-boards.md` (platform-specific, outdated)
+- Added `memory/boards/` folder with README
+- Added `memory/boards/active/` with README + board config template
+- Added `memory/boards/archived/.gitkeep`
+
+---
+
 ## [1.4.0] - 2026-04-08
 
 ### Core process documentation

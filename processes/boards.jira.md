@@ -1,106 +1,34 @@
-# processes/boards.jira.md — Jira Platform Adapter
-<!-- stub | not yet configured -->
+# processes/boards.jira.md — Jira Configuration
+<!-- user layer | read core/boards.jira.md first -->
 
-Read `processes/boards.md` for the generic board interface this adapter implements.
-
----
-
-## Status
-
-**Not configured.** This is a stub. Jira integration requires mcporter (MCP bridge) or direct REST API setup.
+> **Read `core/boards.jira.md` first.** It has the stub with REST API patterns and setup steps.
 
 ---
 
-## Integration Options
+## Configuration
 
-### Option A — MCP via mcporter (recommended if available)
+<!-- Fill this in when you configure Jira. -->
+<!-- See core/boards.jira.md for the full setup checklist. -->
 
-If mcporter is installed:
+**Status:** [ ] Not configured / [ ] Configured
 
-```bash
-mcporter list jira --schema
-```
-
-This returns the available Jira tool signatures. Once you have them, this adapter file
-should document:
-- Auth setup (API token, base URL, project key)
-- Tool signatures for create/update/transition/query
-- Field mapping to generic board concepts
-
-### Option B — REST API (curl)
-
-Jira has a REST API accessible with an API token.
-
-**Auth:** HTTP Basic with email + API token, or Bearer token (newer cloud instances)
-**Base URL:** `https://your-org.atlassian.net/rest/api/3/`
-
-Key endpoints:
-- `GET  /rest/api/3/project` — list projects
-- `GET  /rest/api/3/issue/{issueKey}` — get an issue
-- `POST /rest/api/3/issue` — create an issue
-- `PUT  /rest/api/3/issue/{issueKey}` — update an issue
-- `POST /rest/api/3/issue/{issueKey}/transitions` — move to a new status
-- `GET  /rest/api/3/board/{boardId}/sprint` — list sprints (Jira Software)
-- `GET  /rest/api/3/board/{boardId}/issue` — list issues on a board
-
-**Setup needed before this adapter can be written:**
-1. Jira Cloud URL (your-org.atlassian.net)
-2. User email + API token (generate at id.atlassian.com → Security → API tokens)
-3. Project key(s) for the boards you'll manage
-4. List of status names for your workflow (To Do, In Progress, Done, etc.)
-5. Field IDs for any custom fields used for priority, assignee, labels, etc.
+**Jira Cloud URL:** <!-- https://your-org.atlassian.net -->
+**Project Key(s):** <!-- e.g. PM, DEV, QA -->
 
 ---
 
-## To Activate This Adapter
+## Workflow Mapping
 
-1. Gather the setup info listed above
-2. Run `mcporter list jira --schema` (if using MCP) OR test the REST endpoints manually
-3. Fill in the Auth, Key IDs, and Command Reference sections in this file
-4. Store project keys, board IDs, and field IDs in `memory/boards/active/[board-name].md`
-5. Remove this stub notice
+<!-- Map your Jira statuses to generic board concepts. -->
+<!-- e.g. "To Do" = Not Started, "In Progress" = Active, "Done" = Complete -->
+
+| Jira Status | Board Equivalent |
+|-------------|-----------------|
+| | |
 
 ---
 
-## Placeholder Sections (fill in when configuring)
+## Custom Field IDs
 
-### Auth & Credentials
-
-```bash
-# Required env vars:
-# JIRA_BASE_URL     — e.g. https://your-org.atlassian.net
-# JIRA_EMAIL        — your Atlassian account email
-# JIRA_API_TOKEN    — from id.atlassian.com → Security → API tokens
-```
-
-### Create an Issue
-
-```bash
-# curl example — fill in field names and IDs for your project
-curl -s -X POST "$JIRA_BASE_URL/rest/api/3/issue" \
-  -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  --data '{
-    "fields": {
-      "project": { "key": "YOUR_PROJECT_KEY" },
-      "summary": "Issue title",
-      "issuetype": { "name": "Task" },
-      "assignee": { "accountId": "USER_ACCOUNT_ID" },
-      "duedate": "2026-04-15"
-    }
-  }'
-```
-
-### Transition an Issue (Change Status)
-
-```bash
-# First get available transitions:
-curl -s "$JIRA_BASE_URL/rest/api/3/issue/{issueKey}/transitions" \
-  -u "$JIRA_EMAIL:$JIRA_API_TOKEN"
-
-# Then apply:
-curl -s -X POST "$JIRA_BASE_URL/rest/api/3/issue/{issueKey}/transitions" \
-  -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  --data '{"transition": {"id": "TRANSITION_ID"}}'
-```
+<!-- Record any custom field IDs needed for task creation here. -->
+<!-- e.g. Story Points field ID, Sprint field ID, etc. -->

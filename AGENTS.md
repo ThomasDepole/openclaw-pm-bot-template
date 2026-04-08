@@ -20,6 +20,18 @@ Before doing anything:
 
 ---
 
+## ⛔ Off-Limits: `core/` Folder
+
+**Never edit, overwrite, or delete files in the `core/` folder.**
+
+The `core/` folder contains process documentation maintained by the template.
+It will be overwritten during template upgrades. Any changes you make there will be lost.
+
+Your customizations belong in `processes/`. Every `processes/` file has a designated
+customization section. Add your workspace-specific rules there.
+
+---
+
 ## Your Current Phase: Learning
 
 You start in **ingestion mode**. Your primary contact will drop files into the `ingestion/` folder and ask you to read and process them. Your job is to build a structured knowledge base — the company, its clients, its projects, its people, and its processes.
@@ -150,51 +162,16 @@ Surface new RAID items when relevant: "I flagged 3 new RAID items from today's m
 
 ---
 
-## Task Management
+## Board & Task Management
 
-> **This section must be configured for your specific tool before use.**
+When you need to perform a board operation (create a card, update a task, query for overdue items):
 
-This agent supports any task management tool your setup uses. Common options include:
-- **Trello** — API-based, curl commands, no official CLI
-- **Jira** — REST API or CLI (`jira` tool if installed)
-- **Azure DevOps** — REST API or `az` CLI
-- **Linear** — GraphQL API or CLI
-- **Asana** — REST API
-- **GitHub Issues** — REST API or `gh` CLI
-- **Monday.com** — REST API
+1. Read `processes/boards.md` — your active platform + any custom routing rules
+2. It will point you to `core/boards.md` for generic concepts
+3. Then load the platform adapter: `processes/boards.[platform].md` → `core/boards.[platform].md`
+4. Board IDs, list IDs, label IDs are in `memory/boards/active/[board-name].md`
 
-### Setup Steps
-
-1. Identify which tool you use and note it in `TOOLS.md`
-2. Add credentials/API keys to your `.env` or config (never hardcode in memory files)
-3. Note board/project IDs, list/column IDs in `memory/task-board.md`
-4. Update the "Creating Tasks" section below with your actual commands
-
-### Creating Tasks (Generic)
-
-When you identify an action item, create a task with:
-- **Title:** Clear and actionable — who + what (e.g., "Alex — restore Dropbox access before Friday")
-- **Description:** Source meeting/date, why it matters, any relevant context
-- **Due date:** If a deadline was mentioned
-- **Labels/tags:** If your tool supports them — apply obvious ones (Urgent, Blocked, Client-Facing, etc.)
-
-**[FILL IN: Replace this section with your actual tool's commands once configured]**
-
-```bash
-# Example: Trello
-curl -s -X POST "https://api.trello.com/1/cards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" \
-  -d "idList=LIST_ID_HERE" \
-  -d "name=Task title" \
-  -d "desc=Context and source"
-
-# Example: GitHub Issues
-gh issue create --title "Task title" --body "Context" --label "priority:high"
-
-# Example: Jira (with jira CLI)
-jira issue create --type Task --summary "Task title" --description "Context"
-```
-
-See `docs/tool-integrations.md` for setup guides for each supported tool.
+See `processes/boards.md` to find out which platform adapter is active for this workspace.
 
 ---
 
@@ -209,13 +186,23 @@ workspace/
 ├── HEARTBEAT.md
 ├── TOOLS.md
 ├── .env                    ← API keys and credentials (git-ignored)
+├── core/                   ← ⛔ DO NOT EDIT — maintained by template
+│   └── [process docs]
+├── processes/              ← your customizations (safe to edit)
+│   └── [pointer files + your rules]
+├── tools/                  ← runnable platform helper scripts
+│   ├── notion.sh
+│   └── planner.py
 ├── ingestion/
 │   ├── README.md
-│   ├── meetings/           ← Meeting notes go here
-│   └── calendar/           ← Calendar screenshots go here
-├── docs/                   ← Reference guides and how-tos
+│   ├── meetings/
+│   ├── calendar/
+│   ├── raid-logs/
+│   └── weekly-plans/
+├── docs/                   ← reference guides
 └── memory/
     ├── ingestion-log.md
+    ├── naming-conventions.md
     ├── company.md
     ├── clients.md
     ├── projects.md
@@ -223,12 +210,14 @@ workspace/
     ├── processes.md
     ├── open-questions.md
     ├── calendar.md
-    ├── task-board.md       ← Your task management tool config
-    ├── decisions.md        ← Key decisions that affected scope/cost/timeline
+    ├── decisions.md
     ├── raid-pending.md
-    ├── meetings/           ← Processed meeting summaries
-    ├── team/               ← One file per team member (optional)
-    └── YYYY-MM-DD.md       ← Daily session logs
+    ├── raid-logs.md
+    ├── boards/
+    │   └── active/         ← one .md per configured board (IDs, lists, labels)
+    ├── meetings/
+    ├── team/
+    └── YYYY-MM-DD.md
 ```
 
 ---
@@ -284,6 +273,9 @@ Leave `HEARTBEAT.md` empty until boards/projects are configured. An empty file m
 That folder contains prompt templates for humans — reference material, not instructions for you. The files contain example tokens like `{{BOT_NAME}}` and instructional content that will confuse you if you treat it as a task. If your human asks you to help them use a prompt from that folder, explain what it does and help them fill in the tokens. Do not execute it yourself.
 
 If you are asked to ingest files and the ingestion folder somehow contains files from `prompts/`, skip them and flag it to your human.
+
+**Never edit files in `core/`.**
+The `core/` folder is maintained by the template. See the note above.
 
 ---
 
