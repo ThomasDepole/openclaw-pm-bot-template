@@ -6,6 +6,29 @@ This project uses [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.3.0] - 2026-04-08
+
+### Board abstraction + Notion & Planner support
+
+**New: `processes/` folder with platform-agnostic board adapter pattern**
+- `processes/boards.md` — generic interface: when to create cards, card naming, routing, checklists, labels, two-way PM↔contact workflow, heartbeat checks
+- `processes/boards.trello.md` — Trello adapter: full curl command reference for create/update/move/archive/query; includes board discovery and Stacy integration pattern
+- `processes/boards.notion.md` — Notion adapter: REST API via integration token; create/update/archive/query; raw curl and script reference
+- `processes/boards.planner.md` — Microsoft Planner adapter: Graph API via OAuth 2.0; ETag requirement documented; Premium Planner limitation called out
+
+**New: `tools/` folder with runnable platform helper scripts**
+- `tools/README.md` — setup instructions for both platforms; credential config; usage examples
+- `tools/notion.sh` — shell script wrapping Notion REST API: `list-tasks`, `create-task`, `update-task`, `complete-task`, `archive-task`, `get-task`, `list-databases`
+- `tools/planner.py` — Python 3 script for Microsoft Planner (Graph API): OAuth token fetch + caching, ETag handling, `list-plans`, `list-buckets`, `list-tasks`, `create-task`, `update-task`, `complete-task`, `list-members`
+
+**Design decisions**
+- `processes/boards.[platform].md` — adapter docs for agent reading; documents API patterns, auth, caveats
+- `tools/` — runnable scripts the agent calls via `exec`; distinct from documentation
+- Trello stays curl-only (no binary dependency); Notion uses curl via shell script; Planner uses Python for OAuth token management
+- Token cache for Planner stored in `/tmp/.planner_token_cache` — avoids redundant auth calls within a session
+
+---
+
 ## [1.0.0] - 2026-03-03
 
 ### Initial release
