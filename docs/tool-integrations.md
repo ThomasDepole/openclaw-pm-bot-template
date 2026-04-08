@@ -1,6 +1,22 @@
 # Task Management Tool Integration Guide
 
-**Purpose:** How to connect this PM agent to the most common project/task management tools.
+**Purpose:** How to connect this PM agent to common project and task management tools.
+
+---
+
+## Choosing Your Approach
+
+There are three ways to integrate a task management tool. Use the simplest one that works for your setup:
+
+| Approach | What it is | Best for |
+|----------|-----------|---------| 
+| **REST / curl** | Direct API calls using curl or a helper script | Any tool with an API — zero dependencies, works everywhere |
+| **MCP server** | Model Context Protocol bridge (if mcporter is installed) | Teams already running MCP infrastructure |
+| **CLI tool** | Dedicated command-line tool for the platform | Tools with good official CLIs (gh, az, jira-cli) |
+
+**Default recommendation: start with REST.** It requires only curl (already available) and produces predictable, inspectable output. Upgrade to MCP later if you need it.
+
+For platforms with helper scripts in `tools/` (`notion.sh`, `planner.py`), use those — they wrap the REST API and handle auth and common operations for you.
 
 ---
 
@@ -40,6 +56,104 @@ curl -s -X POST "https://api.trello.com/1/cards?key=$TRELLO_API_KEY&token=$TRELL
 ### Notes
 - Rate limit: 300 req/10s per API key
 - `jq` at `/home/node/.openclaw/jq` for parsing JSON responses
+
+---
+
+## Notion
+
+**Auth method:** Integration token (simple — no app registration required)
+**Helper script:** `tools/notion.sh`
+**Full adapter:** `core/boards.notion.md`
+
+### Get credentials
+1. Go to **https://www.notion.so/profile/integrations** → New integration
+2. Copy the **Internal Integration Secret** (starts with `ntn_` or `secret_`)
+3. Share each database you want the agent to access: open database → `...` → Connect to → your integration
+4. Store in `.env`:
+   ```
+   NOTION_TOKEN=ntn_your_token_here
+   ```
+
+### Find database IDs
+Open a database in Notion. The ID is the 32-character hex string in the URL before `?v=`.
+
+Store database IDs in `memory/boards/active/[board-name].md`.
+
+### Using the helper script
+```bash
+source .env
+
+# List all databases your integration can access
+bash tools/notion.sh list-databases
+
+# List open tasks in a database
+bash tools/notion.sh list-tasks YOUR_DATABASE_ID
+
+# Create a task
+bash tools/notion.sh create-task YOUR_DATABASE_ID "Task title" 2026-04-15
+```
+
+### Notes
+- The integration must be explicitly shared with each database — it doesn't get workspace-wide access automatically
+- Status property values (e.g. "Not Started", "In Progress", "Done") are defined per-database — inspect yours before querying
+- Notion also offers an official hosted MCP server at `https://mcp.notion.com/mcp` if you prefer the MCP path
+
+---
+
+## Microsoft Planner
+
+**Auth method:** OAuth 2.0 via Azure/Entra ID app registration (requires IT admin)
+**Helper script:** `tools/planner.py`
+**Full adapter:** `core/boards.planner.md`
+
+> ⚠️ **Premium Planner is not accessible via the API.** Only Basic Planner works with Microsoft Graph. If your org uses Premium Planner, this integration is not possible — use Notion or another tool instead.
+
+### Get credentials (IT admin required)
+1. Go to **https://entra.microsoft.com** → App registrations → New registration
+2. Name it (e.g. "PM Bot"), select Single tenant, register
+3. Note the **Application (client) ID** and **Directory (tenant) ID**
+4. Under Certificates & secrets → New client secret → copy the value immediately
+5. Under API permissions → Add permission → Microsoft Graph → Application permissions → `Tasks.ReadWrite.All` → Grant admin consent
+6. Store in `.env`:
+   ```
+   PLANNER_TENANT_ID=your-tenant-id
+   PLANNER_CLIENT_ID=your-client-id
+   PLANNER_CLIENT_SECRET=your-client-secret
+   ```
+
+### Find plan and bucket IDs
+```bash
+source .env
+
+# List plans in a group
+python3 tools/planner.py list-plans --group-id YOUR_GROUP_ID
+
+# List buckets (columns) in a plan
+python3 tools/planner.py list-buckets --plan-id YOUR_PLAN_ID
+```
+
+Your Microsoft 365 Group ID is in the Entra admin center → Groups → your group → Object ID.
+
+Store plan IDs, bucket IDs, and group IDs in `memory/boards/active/[board-name].md`.
+
+### Using the helper script
+```bash
+source .env
+
+# List open tasks
+python3 tools/planner.py list-tasks --plan-id YOUR_PLAN_ID
+
+# Create a task
+python3 tools/planner.py create-task --plan-id YOUR_PLAN_ID --title "Task title" --due 2026-04-15 --bucket-id YOUR_BUCKET_ID
+
+# Complete a task
+python3 tools/planner.py complete-task --task-id TASK_ID
+```
+
+### Notes
+- Tokens are cached automatically in `/tmp/.planner_token_cache` (~1 hour lifetime)
+- All PATCH operations require an ETag — `tools/planner.py` handles this automatically
+- Requires `requests`: `pip install requests`
 
 ---
 
@@ -256,6 +370,6 @@ curl -s -X POST "https://app.asana.com/api/1.0/tasks" \
 ## General Notes
 
 - **Store all credentials in `.env`** — never hardcode in memory files or scripts
-- **Record IDs in `memory/task-board.md`** — so the agent doesn't have to re-fetch them every time
+- **Record IDs in `memory/boards/active/[board-name].md`** — so the agent doesn't have to re-fetch them every time
 - **Update `AGENTS.md`** with your actual commands once configured — the generic placeholders won't work until you do
 - **Test manually first** — run the curl/CLI command directly before trusting the agent to use it

@@ -111,31 +111,6 @@ Calendar screenshots or exports land in `ingestion/calendar/`.
 
 ---
 
-## Weekly Plans / Status Reports
-
-Regular planning files (weekly plans, status reports, sprint summaries) land in `ingestion/weekly-plans/`.
-
-**Steps:**
-1. Read the file — identify the period it covers
-2. Extract committed deliverables — what is promised to whom, by when
-3. Extract action items — who owns what; check for duplicates against existing board cards
-4. Cross-reference project names → `memory/naming-conventions.md`
-5. Compare against what you already know — only surface what is **new or additive**
-6. Create board cards:
-   - Primary contact items → their primary board, New Tasks or equivalent
-   - Team items → team board, under the owner's column
-   - See `processes/boards.md` for routing
-7. Flag RAID items → `memory/raid-pending.md` per `processes/raid.md`
-8. Update project status in `memory/projects.md` if the file gives clearer status
-9. Write summary → `memory/weekly-plans/YYYY-MM-DD.md` — period, key deliverables, what's new vs. already known
-10. Delete the source file
-11. Update ingestion log
-
-**Focus on:** commitments with dates, client-facing items, things not already tracked
-**Skip:** items with existing board cards, context that repeats what's already in memory
-
----
-
 ## RAID Log Files
 
 Actual RAID log files land in `ingestion/raid-logs/`. Each dropped file is the **latest version** — treat it as authoritative. See `processes/raid.md` for the full RAID workflow.

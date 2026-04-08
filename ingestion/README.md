@@ -12,12 +12,13 @@ This folder is how you give your PM agent context. Drop files in the right subfo
 |--------|----------------|
 | `meetings/` | Meeting notes, call summaries, scrum notes, AI transcripts |
 | `status-reports/` | Weekly/sprint status updates, project health reports |
-| `projects/` | SOWs, project briefs, charters, RAID logs, change orders |
+| `projects/` | SOWs, project briefs, charters, change orders |
 | `people/` | Team rosters, org charts, stakeholder lists |
 | `clients/` | Client overviews, account context, key contacts |
 | `processes/` | SOPs, workflows, policies, standards, methodologies |
 | `reference/` | Company overview, general context, anything else |
 | `calendar/` | Calendar screenshots or exports *(optional)* |
+| `raid-logs/` | RAID log files (treated as authoritative current version) |
 
 Each folder has a `README.md` inside with more detail on what belongs there.
 

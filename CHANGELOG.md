@@ -6,6 +6,34 @@ This project uses [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.6.0] - 2026-04-08
+
+### Cleanup, ingestion fixes, and integration docs
+
+**Ingestion**
+- Added `ingestion/raid-logs/` subfolder with README
+- Removed `weekly-plans/` ingestion path — this is a deployment-specific workflow, not a core template pattern
+- Updated `ingestion/README.md` folder table to include `raid-logs/`, removed `weekly-plans/`
+- Removed "Weekly Plans / Status Reports" section from `core/ingestion.md` and `processes/ingestion.md`
+- Deleted malformed `ingestion/{status-reports,...}` folder (bad glob expansion)
+
+**HEARTBEAT.md**
+- Replaced stub comment with a real working example using placeholder IDs
+- Includes all check types: Monday Digest, Morning Brief, Midday Nudge, new overdue alerts, board activity feed, Done list archive
+- Includes state file reference, placeholder table, and note on adapting for Notion/Planner
+
+**docs/tool-integrations.md**
+- Added three-tier approach intro (REST → MCP → CLI)
+- Added Notion section with `tools/notion.sh` usage
+- Added Microsoft Planner section with `tools/planner.py` usage, app registration steps, Premium warning
+- Updated general notes: `memory/task-board.md` reference replaced with `memory/boards/active/`
+
+**Memory cleanup**
+- Deleted `memory/scrums.md`, `memory/sdlc-verbatim.md`, `memory/website.md` (stale/non-generic files)
+- Fixed `MEMORY.md` Trello Configuration section → generic Board Configuration pointing to `memory/boards/active/`
+
+---
+
 ## [1.5.0] - 2026-04-08
 
 ### Core/processes architecture refactor

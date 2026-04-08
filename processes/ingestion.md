@@ -24,7 +24,6 @@
 <!-- Document any ingestion sources beyond the standard subfolders. -->
 <!-- e.g. "RAID logs come in as .xlsx in ingestion/raid-logs/" -->
 <!-- e.g. "Client briefs land in ingestion/clients/ as PDFs" -->
-<!-- e.g. "Weekly plans are written inline by the contact, not dropped as files" -->
 
 ---
 

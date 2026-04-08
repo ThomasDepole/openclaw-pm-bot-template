@@ -37,18 +37,13 @@ Quick-load reference for session startup. Read this first. Dive into `memory/` f
 
 ---
 
-## Trello Configuration
+## Board Configuration
 
-[Fill in via ingestion — use memory/trello-boards.md for detail]
+Board IDs, list IDs, and label IDs live in `memory/boards/active/[board-name].md`.
+Run the board discovery commands in `processes/boards.[platform].md` to find your IDs,
+then create a config file there.
 
-### Primary Task Board
-**Board ID:** `[FILL IN]`
-
-| List | ID |
-|------|----|
-| New Tasks | `[FILL IN]` |
-| In Progress | `[FILL IN]` |
-| Done | `[FILL IN]` |
+See `processes/boards.md` for the active platform and routing rules.
 
 ---
 
