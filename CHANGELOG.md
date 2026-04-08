@@ -6,6 +6,27 @@ This project uses [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.0] - 2026-04-08
+
+### Core process documentation
+
+**New: `processes/` folder fully fleshed out**
+- `processes/README.md` — folder index, "do not edit core files" guidance, separation of core vs. custom, how to extend
+- `processes/ingestion.md` — full generic ingestion workflow: documents, meeting notes, calendar/schedule files, weekly plans/status reports, RAID log files; workspace-specific config (naming corrections, board IDs) referenced to `memory/`
+- `processes/emails.md` — generic email drafting: when to draft, configurable routing rules, Trello proxy card format (internal + external/via-internal patterns), writing style reference, future direct-send migration path
+- `processes/raid.md` — RAID log methodology: what belongs in a RAID log (filter guidance), pending workflow, identifying RAID items in meetings (signal patterns per type), processing actual log files, `memory/raid-logs.md` and `memory/raid-pending.md` structure
+- `processes/boards.jira.md` — Jira stub: both MCP (mcporter) and REST API paths documented, placeholder sections ready to fill in
+
+**New: `memory/naming-conventions.md`** — scaffold for transcription error corrections referenced by `ingestion.md`; workspace-specific, ships empty
+
+**Design decisions**
+- Core process files marked `<!-- core process | do not customize here -->` — convention-based separation, formal override mechanism deferred to future version
+- Workspace-specific config stays in `memory/` (IDs, names, routing rules, naming corrections) — processes/ stays generic and upgradeable
+- `emails.md` delivery method is configurable — Trello proxy is default, direct send is documented as an upgrade path
+- RAID pulled out of ingestion into its own file — substantial enough to stand alone and be referenced independently
+
+---
+
 ## [1.3.0] - 2026-04-08
 
 ### Board abstraction + Notion & Planner support
